@@ -1,31 +1,24 @@
-import sys 
-sys.path.append(r"/data")
 from fastapi import FastAPI, UploadFile, status
-import os 
-import uuid
-from pydantic import BaseModel
-from predict.generate_front import Generate
+from fastapi_health import health
 
 
-app = FastAPI()
-
-@app.get("/healthcheck", status_code=status.HTTP_200_OK)
-async def healthcheck():
-    return {"success": True}
+from routers import GenerateRouter
 
 
-@app.post("/imagetest/")
-async def imagetest(file: UploadFile, userid: int):
-    content = await file.read()
-    filename = f"{str(uuid.uuid4())}.jpg"
-    use_model = Generate(usernum=str(userid), img_name=filename)
+def create_app() -> FastAPI:
+    app = FastAPI()
+    init_router(app)
+    return app
 
-    with open(use_model.Get_Img_Dir(),"wb") as fp:
-        fp.write(content)
+def init_settings(app: FastAPI):
+    app.add_api_route(
+        "/health",
+        health([])
+    )
 
-    try:
-        result_img_dir = use_model.excute()
-    except:
-        return {"success": False, "message": "Model ERROR"}
-    else:
-        return {"success": True, "image": result_img_dir}
+
+def init_router(app: FastAPI):
+    app.include_router(GenerateRouter)
+
+
+app = create_app()

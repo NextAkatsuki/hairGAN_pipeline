@@ -1,5 +1,5 @@
 import sys
-sys.path.append(r"C:\\Users\\COMPUTER\\Desktop\\aihackathon\\hairgan_pipeline")
+# sys.path.append(r"C:\\Users\\COMPUTER\\Desktop\\aihackathon\\hairgan_pipeline")
 import numpy as np
 import tensorflow as tf
 from tf_lib import disk_image_batch_dataset
