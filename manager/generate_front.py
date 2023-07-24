@@ -1,9 +1,12 @@
-import os 
+import numpy as np
 import cv2 
-from use_model import Model_Run
+from use_model import Generate_Model
+import typing as T
 
 class Generate():
     def __init__(self, usernum: str, img_name: str):
+        self.segmodel = Generate_Model(experiment_dir="./output/seg4paper",img_size=(256,256,3))
+        self.hairmodel = Generate_Model(experiment_dir="./output/hair4paper",img_size=(256,256,3))
         self.img_name = img_name
         self.usernum = usernum
         # os.makedirs(f"../image/{usernum}/rawhair") #입력 이미지
@@ -57,13 +60,13 @@ class Generate():
     def Get_Img_Dir(self):
         return f"../image/{self.usernum}/rawhair/{self.img_name}"
 
-    def excute(self):
-        input_img_path = os.path.join(f"image/{self.usernum}/rawhair", self.img_name)
-        seg_image = Model_Run(experiment_dir="../output/seg4paper", input_img=input_img_path)
+    def excute(self, inputs):
+        # input_img_path = os.path.join(f"image/{self.usernum}/rawhair", self.img_name)
+        seg_image = self.segmodel.Model_Run(input_img_dir=input_img_path)
         self._raw2seg(seg_image, self.img_name)
         print("image being segmented")
 
-        gan_image = Model_Run(experiment_dir="../output/hair4paper", input_img=input_img_path)
+        gan_image = self.hairmodel.Model_Run(input_img_dir=input_img_path)
         self._seg2raw(gan_image, self.img_name)
         print("image being synthesized")
 

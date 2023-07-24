@@ -1,6 +1,6 @@
 import tensorflow as tf
 import tensorflow.keras as keras
-
+import tensorflow_addons as tfa
 
 # ==============================================================================
 # =                                  networks                                  =
@@ -10,7 +10,7 @@ def _get_norm_layer(norm):
     if norm == 'none':
         return lambda: lambda x: x
     elif norm == 'batch_norm':
-        return keras.layers.BatchNormalization(axis=[0,1])
+        return tfa.layers.InstanceNormalization
     elif norm == 'layer_norm':
         return keras.layers.LayerNormalization
 
