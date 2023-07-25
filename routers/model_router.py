@@ -2,6 +2,7 @@ from fastapi_restful.inferring_router import InferringRouter
 from fastapi.logger import logger
 import uuid
 import cv2
+import os 
 import numpy as np
 from fastapi import (
     Depends,
@@ -46,6 +47,9 @@ class GenerateModel:
         _, encoded_image = cv2.imencode('.jpg',np.array(result_imgs))
         result_encod_img = encoded_image.tobytes()
         logger.info("=======Predict Done=======")
+
+        os.remove(f'image/rawhair/{filename}')
+        os.remove(f'image/seghair/{filename}')
 
         return Response(content=result_encod_img, media_type="image/jpg")
 

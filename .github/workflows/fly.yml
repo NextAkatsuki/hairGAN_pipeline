@@ -1,0 +1,18 @@
+name: Fly Deploy
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    deploy:
+      name: Deploy app
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: superfly/flyctl-actions/setup-flyctl@main
+        - run: flyctl deploy --remote-only
+          env:
+            FLY_API_TOKEN: ${{ secrets.B46246EFE07e865272f42C23C8a5792964c8a71626078ed2c494244e5359B9222F6F9C5af305965406F179B4FE0a2137b898}}
