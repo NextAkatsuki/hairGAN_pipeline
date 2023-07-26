@@ -1,6 +1,7 @@
 name: Fly Deploy
 on:
   pull_request:
+    branches: ["main"]
     types:
     - closed
 
@@ -15,4 +16,4 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@main
       - run: flyctl deploy --remote-only
         env:
-          FLY_API_TOKEN: ${{ secrets.B46246EFE07e865272f42C23C8a5792964c8a71626078ed2c494244e5359B9222F6F9C5af305965406F179B4FE0a2137b898}}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN}}
