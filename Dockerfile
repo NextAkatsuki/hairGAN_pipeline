@@ -2,8 +2,6 @@ FROM tensorflow/tensorflow:2.4.0
 WORKDIR /app
 COPY . /app
 
-ENV TF_GPU_DEVICE_NAME=
-
 RUN apt-get update && \
     apt-get -y install libgl1-mesa-glx && \
     python -m pip install --upgrade pip
