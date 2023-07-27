@@ -3,9 +3,13 @@ import pylib as py
 import tensorflow as tf
 from tf_lib import Checkpoint
 import imlib
+import os 
 
 from .data import *
 from model import module
+
+# cudart not found 안보이게하는 코드
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 class Generate_Model():
 
