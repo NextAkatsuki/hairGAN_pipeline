@@ -5,3 +5,4 @@
 docker_run.sh
 README.md
 .github/
+locustfile.py

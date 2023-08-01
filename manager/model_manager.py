@@ -23,6 +23,7 @@ class GenerateModelManager(ManagedModel):
                 if mask_inv[i][j] != 0:
                     raw_imgs[i][j] = [255,255,255]
 
+        
         cv2.imwrite(f'{f_path}{filename}', raw_imgs)
         result_dirs.append(f'{f_path}{filename}')
 
@@ -51,20 +52,21 @@ class GenerateModelManager(ManagedModel):
 
         try:
             seg_image = self.segmodel.Model_Run(input_img_dirs=inputs[0], batch_size=len(inputs[0]))
-            # print(seg_image)
             seg_img_dir = self._raw2seg(raw_imgs=raw_seg_image, seg_img = seg_image, filename=inputs[1])
             print("image being segmented")
 
             gan_image = self.hairmodel.Model_Run(input_img_dirs=seg_img_dir, batch_size=len(inputs[0]))
             gan_image = cv2.cvtColor(gan_image, cv2.COLOR_BGR2RGB)
             result_img = self._seg2raw(raw_imgs=raw_hair_image, gan_img = gan_image, filename=inputs[1])
+            # cv2.imwrite("image/test.png",result_img)
             print("image being synthesized")
         except Exception as e:
             logger.error(f"Error {self.__class__.__name__}: {e}")
+            return []
 
         return result_img
 
-
+#배치데이터부분에서 문제가 생김 (out of index)
 @lru_cache(maxsize=1)
 def get_model_generate_streamer():
     streamer = Streamer(

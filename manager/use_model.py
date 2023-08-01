@@ -4,10 +4,13 @@ import tensorflow as tf
 from tf_lib import Checkpoint
 import imlib
 import os 
+from silence_tensorflow import silence_tensorflow
 
 from .data import *
 from model import module
 
+#tensorflow warning 안보이게하는 코드
+silence_tensorflow()
 # cudart not found 안보이게하는 코드
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -46,6 +49,7 @@ class Generate_Model():
             A2B, A2B2A = sample_A2B(A)
             for A_i, A2B_i, A2B2A_i in zip(A, A2B, A2B2A):
                 img = imlib.im2uint(np.concatenate([A2B_i.numpy()], axis=1))
+                
                 # im.imwrite(img, py.join(save_dir, py.name_ext(A_img_paths_test[i])))
             
 
