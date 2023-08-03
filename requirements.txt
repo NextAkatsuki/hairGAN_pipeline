@@ -39,4 +39,5 @@ uvicorn==0.16.0
 Werkzeug==2.0.3
 wincertstore==0.2
 zipp==3.6.0
+silence-tensorflow
 python-multipart

@@ -42,8 +42,9 @@ class GenerateModel:
         with open(file_fullname,"wb") as fp:
             fp.write(content) #서버 로컬 스토리지에 이미지 저장
 
-
+        
         result_imgs = self.svc.predict_imgs(file_fullname, k, filename)
+        print(np.array(result_imgs).shape)
         _, encoded_image = cv2.imencode('.jpg',np.array(result_imgs))
         result_encod_img = encoded_image.tobytes()
         logger.info("=======Predict Done=======")

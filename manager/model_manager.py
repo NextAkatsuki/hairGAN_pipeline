@@ -4,11 +4,12 @@ from .use_model import Generate_Model
 import cv2
 from functools import lru_cache
 
-class GenerateModelManager(ManagedModel):
-
-    def init_model(self):
-        self.segmodel = Generate_Model(experiment_dir="./output/seg4paper",img_size=(256,256,3))
-        self.hairmodel = Generate_Model(experiment_dir="./output/hair4paper",img_size=(256,256,3))
+# ManagedModel 
+class GenerateModelManager():
+    #init_model
+    def __init__(self):
+        self.segmodel = Generate_Model(experiment_dir="volume/seg4paper",img_size=(256,256,3))
+        self.hairmodel = Generate_Model(experiment_dir="volume/hair4paper",img_size=(256,256,3))
 
 
     #seg4paper의 정면이미지에서 머리인식용이미지를 이용하여 머리부분만 검출하여 hair4paper에 저장
@@ -47,6 +48,7 @@ class GenerateModelManager(ManagedModel):
     #inputs[0] = image_dirs:list inputs[1] = image_file_name:str
     def predict(self, inputs):
         logger.info(f"batch size: {len(inputs[0])}")
+        result_imgs = []
         raw_seg_image = cv2.imread(inputs[0][0])
         raw_hair_image = cv2.imread(inputs[0][0])
 
@@ -62,18 +64,21 @@ class GenerateModelManager(ManagedModel):
             print("image being synthesized")
         except Exception as e:
             logger.error(f"Error {self.__class__.__name__}: {e}")
+            print("Error to generate image")
             return []
-
+        
+        # result_imgs.append(result_img)
+        print(result_img.shape)
         return result_img
 
 #배치데이터부분에서 문제가 생김 (out of index)
-@lru_cache(maxsize=1)
+@lru_cache(maxsize=32)
 def get_model_generate_streamer():
     streamer = Streamer(
         GenerateModelManager,
-        batch_size=5,
-        max_latency=0.2,
-        worker_num=2
+        batch_size=8,
+        max_latency=1,
+        worker_num=4
     )
     return streamer
 
